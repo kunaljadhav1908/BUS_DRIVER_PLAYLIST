@@ -1,0 +1,320 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --sky-dark: #142c3d;
+    --sky-mid: #52798a;
+    --sky-light: #c5966e;
+
+    --mountain-dark: #17382f;
+    --mountain-mid: #285542;
+
+    --forest-dark: #09231a;
+    --forest-mid: #174533;
+
+    --river-dark: #125565;
+    --river-light: #3f9bad;
+
+    --road-dark: #222728;
+    --road-light: #414544;
+
+    --yellow: #efc35b;
+    --yellow-light: #ffe19a;
+
+    --orange: #d9652b;
+
+    --cream: #f8e9c8;
+
+    --glass: rgba(9, 18, 20, 0.65);
+    --glass-border: rgba(255, 255, 255, 0.15);
+  }
+
+  body {
+    overflow: hidden;
+    background: #07100e;
+    color: #fff;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    user-select: none;
+  }
+}
+
+/* Custom Keyframe Animations */
+
+@keyframes grain {
+  0% { transform: translate(0,0); }
+  25% { transform: translate(2%,-1%); }
+  50% { transform: translate(-1%,2%); }
+  75% { transform: translate(1%,1%); }
+  100% { transform: translate(0,0); }
+}
+
+@keyframes sunPulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.07); }
+}
+
+@keyframes cloudMove {
+  from { left: -350px; }
+  to { left: 120%; }
+}
+
+@keyframes water {
+  from { transform: translateX(0); }
+  to { transform: translateX(-90px); }
+}
+
+@keyframes roadMove {
+  from { background-position: 0 0; }
+  to { background-position: 0 65px; }
+}
+
+@keyframes treeSway {
+  0%, 100% { transform: rotate(-1deg); }
+  50% { transform: rotate(1deg); }
+}
+
+@keyframes mistMove {
+  from { transform: translateX(-5%); }
+  to { transform: translateX(5%); }
+}
+
+@keyframes blink {
+  50% { opacity: 0.3; }
+}
+
+@keyframes busDrive {
+  0% { left: -350px; }
+  100% { left: calc(100% + 350px); }
+}
+
+@keyframes busBounce {
+  0%, 100% { margin-top: 0; }
+  50% { margin-top: 3px; }
+}
+
+@keyframes windowReflection {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(100%); }
+}
+
+@keyframes wheelSpin {
+  to { transform: rotate(360deg); }
+}
+
+/* Custom Component Classes */
+
+.scene-bg-dawn {
+  background: linear-gradient(180deg, #102434 0%, #3d6273 43%, #c08962 72%, #142a22 100%);
+}
+
+.scene-bg-sunset {
+  background: linear-gradient(180deg, #2b1736 0%, #7d3c52 38%, #d96d3f 70%, #1c2621 100%);
+}
+
+.scene-bg-night {
+  background: linear-gradient(180deg, #050a12 0%, #0c1827 45%, #152233 75%, #08120e 100%);
+}
+
+.grain-overlay::after {
+  content: "";
+  position: absolute;
+  inset: -50%;
+  z-index: 81;
+  pointer-events: none;
+  opacity: 0.045;
+  background-image: repeating-radial-gradient(circle at 0 0, white 0, transparent 1px, transparent 4px);
+  background-size: 6px 6px;
+  animation: grain 0.25s steps(2) infinite;
+}
+
+.vignette-overlay::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: 80;
+  pointer-events: none;
+  background: radial-gradient(circle at center, transparent 25%, rgba(0,0,0,0.1) 58%, rgba(0,0,0,0.65) 100%);
+}
+
+/* Cloud base style */
+.cloud-shape {
+  position: absolute;
+  width: 190px;
+  height: 45px;
+  border-radius: 100px;
+  background: rgba(255, 255, 255, 0.14);
+  filter: blur(6px);
+  opacity: 0.7;
+  z-index: 3;
+}
+
+.cloud-shape::before,
+.cloud-shape::after {
+  content: "";
+  position: absolute;
+  border-radius: 50%;
+  background: inherit;
+}
+
+.cloud-shape::before {
+  width: 78px;
+  height: 78px;
+  left: 30px;
+  bottom: 8px;
+}
+
+.cloud-shape::after {
+  width: 62px;
+  height: 62px;
+  right: 30px;
+  bottom: 5px;
+}
+
+/* Mountain Base */
+.mountain-shape {
+  position: absolute;
+  bottom: 255px;
+  width: 0;
+  height: 0;
+  border-left: 270px solid transparent;
+  border-right: 270px solid transparent;
+  border-bottom: 390px solid #315264;
+  opacity: 0.65;
+  filter: blur(1px);
+  transition: margin 0.2s ease;
+  z-index: 4;
+}
+
+.mountain-shape::after {
+  content: "";
+  position: absolute;
+  left: -82px;
+  top: 105px;
+  width: 0;
+  height: 0;
+  border-left: 82px solid transparent;
+  border-right: 82px solid transparent;
+  border-bottom: 120px solid rgba(255, 255, 255, 0.2);
+}
+
+/* River style */
+.river-flow {
+  position: absolute;
+  left: -5%;
+  bottom: 0;
+  width: 110%;
+  height: 190px;
+  overflow: hidden;
+  background: linear-gradient(180deg, var(--river-light), var(--river-dark));
+  clip-path: polygon(0 35%, 17% 23%, 32% 40%, 47% 30%, 64% 48%, 80% 33%, 100% 42%, 100% 100%, 0 100%);
+  z-index: 9;
+}
+
+.river-flow::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(170deg, rgba(255,255,255,0.14) 0 2px, transparent 2px 22px);
+  animation: water 4s linear infinite;
+}
+
+/* 3D Road style */
+.road-perspective {
+  position: absolute;
+  left: 50%;
+  bottom: 35px;
+  width: 78%;
+  height: 280px;
+  transform: translateX(-50%) perspective(400px) rotateX(35deg);
+  transform-origin: bottom;
+  background: linear-gradient(90deg, #202324, #414545 50%, #222526);
+  clip-path: polygon(35% 0, 65% 0, 100% 100%, 0 100%);
+  z-index: 12;
+}
+
+.road-perspective::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 7px;
+  height: 100%;
+  transform: translateX(-50%);
+  background: repeating-linear-gradient(to bottom, #e8cb6d 0 35px, transparent 35px 65px);
+  animation: roadMove 1.1s linear infinite;
+}
+
+/* Tree shape */
+.tree-shape {
+  position: absolute;
+  bottom: 0;
+  width: 0;
+  height: 0;
+  border-left: 25px solid transparent;
+  border-right: 25px solid transparent;
+  border-bottom: 95px solid #102d22;
+  animation: treeSway 3s ease-in-out infinite;
+}
+
+.tree-shape::before {
+  content: "";
+  position: absolute;
+  left: -20px;
+  bottom: 35px;
+  width: 0;
+  height: 0;
+  border-left: 20px solid transparent;
+  border-right: 20px solid transparent;
+  border-bottom: 65px solid #174733;
+}
+
+.tree-shape::after {
+  content: "";
+  position: absolute;
+  left: -3px;
+  top: 75px;
+  width: 6px;
+  height: 40px;
+  background: #4b3725;
+}
+
+/* Bus Window Reflection */
+.bus-window-glass {
+  position: absolute;
+  top: 52px;
+  width: 55px;
+  height: 45px;
+  border: 3px solid #392b22;
+  border-radius: 6px;
+  background: linear-gradient(135deg, #294752, #13262c);
+  overflow: hidden;
+}
+
+.bus-window-glass::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(120deg, transparent 40%, rgba(255,255,255,0.18), transparent 60%);
+  animation: windowReflection 2.5s linear infinite;
+}
+
+/* Wheel */
+.wheel-style {
+  position: absolute;
+  bottom: -20px;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 7px solid #151515;
+  background: #353535;
+  box-shadow: inset 0 0 0 6px #777;
+  animation: wheelSpin 0.35s linear infinite;
+}
+
+.wheel-style::after {
+  content: "";
+  position: absolute;
+  inset: 12px;
+  border-radius: 50%;
+  background: #aaa;
+}

@@ -1,0 +1,6 @@
+{
+  "name": "Bus Driver Playlist",
+  "description": "A scenic cinematic musical journey through mountain roads with YouTube playlist integration, live dashboard, animated scenery, and interactive bus controls.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
